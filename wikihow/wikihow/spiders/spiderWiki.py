@@ -6,15 +6,17 @@ class WikihowSpider(scrapy.Spider):
 
     def parse(self, response):
         self.title = response.xpath("//h1/a/text()").extract_first()
-        for imagem in response.xpath("//li/div/a/div/img/@data-src").extract():
-            # print("EIIIII=TAAAAAAAAAAAAA")
-            yield {
-                'title': self.title,
-                'url' : imagem
-            }
-        # 
-        # for link in response.css('a.related-title::attr(href)'):
-        #     yield response.follow(link, self.parse)
+        resposta = input("Quer raspar '" + self.title + "'? ")
+        if(resposta == 'y'):
+            for imagem in response.xpath("//ol/li/div/a/div/img/@data-src").extract():
+                # print("EIIIII=TAAAAAAAAAAAAA")
+                yield {
+                    'title': self.title,
+                    'url' : imagem
+                }
+        
+        for link in response.css('a.related-title::attr(href)'):
+            yield response.follow(link, self.parse)
     #
     # def parse_author(self, response):
     #
